@@ -8,9 +8,9 @@ screenGui.Name = "EgoDrivenKeyUI"
 screenGui.ResetOnSpawn = false
 screenGui.Parent = PlayerGui
 
--- Create main frame (bigger, centered)
+-- Create main frame
 local frame = Instance.new("Frame")
-frame.Size = UDim2.new(0, 400, 0, 230)
+frame.Size = UDim2.new(0, 400, 0, 260)
 frame.Position = UDim2.new(0.5, 0, 0.5, 0)
 frame.AnchorPoint = Vector2.new(0.5, 0.5)
 frame.BackgroundColor3 = Color3.fromRGB(24, 24, 24)
@@ -35,10 +35,24 @@ title.TextSize = 28
 title.TextXAlignment = Enum.TextXAlignment.Left
 title.Parent = frame
 
+-- Thank-you description (now between title and textbox)
+local note = Instance.new("TextLabel")
+note.Size = UDim2.new(1, -40, 0, 30)
+note.Position = UDim2.new(0, 20, 0, 65)
+note.BackgroundTransparency = 1
+note.Text = "If you got your key from the link, it's kinda perm, so uh yeah, better thank me — NEL__BLR"
+note.TextColor3 = Color3.fromRGB(180, 180, 180)
+note.Font = Enum.Font.Gotham
+note.TextSize = 13
+note.TextWrapped = true
+note.TextXAlignment = Enum.TextXAlignment.Left
+note.TextYAlignment = Enum.TextYAlignment.Top
+note.Parent = frame
+
 -- TextBox for key input
 local keyBox = Instance.new("TextBox")
 keyBox.Size = UDim2.new(1, -40, 0, 50)
-keyBox.Position = UDim2.new(0, 20, 0, 90)
+keyBox.Position = UDim2.new(0, 20, 0, 100)
 keyBox.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 keyBox.TextColor3 = Color3.fromRGB(220, 220, 220)
 keyBox.PlaceholderText = "Enter your key here..."
@@ -53,10 +67,15 @@ local keyBoxCorner = Instance.new("UICorner")
 keyBoxCorner.CornerRadius = UDim.new(0, 10)
 keyBoxCorner.Parent = keyBox
 
--- Button container frame for horizontal layout
+-- Autofill saved key
+if getgenv and getgenv().EgoDrivenSavedKey then
+    keyBox.Text = getgenv().EgoDrivenSavedKey
+end
+
+-- Button container
 local buttonFrame = Instance.new("Frame")
 buttonFrame.Size = UDim2.new(1, -40, 0, 60)
-buttonFrame.Position = UDim2.new(0, 20, 0, 150)
+buttonFrame.Position = UDim2.new(0, 20, 0, 160)
 buttonFrame.BackgroundTransparency = 1
 buttonFrame.Parent = frame
 
@@ -92,10 +111,10 @@ local submitButtonCorner = Instance.new("UICorner")
 submitButtonCorner.CornerRadius = UDim.new(0, 10)
 submitButtonCorner.Parent = submitButton
 
--- Status bar frame (blue strip)
+-- Status bar frame
 local statusBar = Instance.new("Frame")
 statusBar.Size = UDim2.new(1, 0, 0, 30)
-statusBar.Position = UDim2.new(0, 0, 1, -30)
+statusBar.Position = UDim2.new(0, 0, 1, -50)
 statusBar.BackgroundColor3 = Color3.fromRGB(55, 120, 255)
 statusBar.BorderSizePixel = 0
 statusBar.Parent = frame
@@ -104,7 +123,7 @@ local statusBarCorner = Instance.new("UICorner")
 statusBarCorner.CornerRadius = UDim.new(0, 10)
 statusBarCorner.Parent = statusBar
 
--- Status label inside the blue bar
+-- Status label
 local statusLabel = Instance.new("TextLabel")
 statusLabel.Size = UDim2.new(1, -20, 1, 0)
 statusLabel.Position = UDim2.new(0, 10, 0, 0)
@@ -117,7 +136,7 @@ statusLabel.TextXAlignment = Enum.TextXAlignment.Left
 statusLabel.TextYAlignment = Enum.TextYAlignment.Center
 statusLabel.Parent = statusBar
 
--- Button hover effects
+-- Hover effects
 local function onHover(button, enterColor, leaveColor)
     button.MouseEnter:Connect(function()
         button.BackgroundColor3 = enterColor
@@ -130,8 +149,7 @@ end
 onHover(getKeyButton, Color3.fromRGB(105, 190, 255), Color3.fromRGB(85, 170, 255))
 onHover(submitButton, Color3.fromRGB(85, 160, 255), Color3.fromRGB(67, 138, 255))
 
--- Button actions
-
+-- Get Key action
 getKeyButton.MouseButton1Click:Connect(function()
     local keyLink = "https://NEL-BLR.github.io/"
     if setclipboard then
@@ -143,19 +161,23 @@ getKeyButton.MouseButton1Click:Connect(function()
     statusLabel.TextColor3 = Color3.new(1, 1, 1)
 end)
 
+-- Submit Key action
 submitButton.MouseButton1Click:Connect(function()
     local inputKey = keyBox.Text:gsub("%s", "") -- remove spaces
     local prefix = "Ego-Driv3n_"
     local validLength = #prefix + 12
 
     if inputKey:sub(1, #prefix) == prefix and #inputKey == validLength then
+        if getgenv then
+            getgenv().EgoDrivenSavedKey = inputKey
+        end
         statusLabel.Text = "Status: Access Enlocked to Ego Driven"
         statusLabel.TextColor3 = Color3.new(1, 1, 1)
         keyBox.Text = ""
         wait(1)
         screenGui:Destroy()
         -- Trigger your main Ego Driven logic here
-      local Library = loadstring(game:HttpGetAsync("https://github.com/ActualMasterOogway/Fluent-Renewed/releases/latest/download/Fluent.luau"))()
+            local Library = loadstring(game:HttpGetAsync("https://github.com/ActualMasterOogway/Fluent-Renewed/releases/latest/download/Fluent.luau"))()
 local SaveManager = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/ActualMasterOogway/Fluent-Renewed/master/Addons/SaveManager.luau"))()
 local InterfaceManager = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/ActualMasterOogway/Fluent-Renewed/master/Addons/InterfaceManager.luau"))()
 
@@ -270,14 +292,14 @@ Library:Notify{
 }
 
 SaveManager:LoadAutoloadConfig()
-      
+            
     else
         statusLabel.Text = "Status: Key Invalid"
         statusLabel.TextColor3 = Color3.new(1, 0, 0)
     end
 end)
 
--- Optional: Press Enter to submit key
+-- Press Enter to submit
 keyBox.FocusLost:Connect(function(enterPressed)
     if enterPressed then
         submitButton:Activate()
